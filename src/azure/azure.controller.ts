@@ -7,12 +7,18 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('azure')
 export class AzureController {
+  config: string;
+  constructor(private readonly configService: ConfigService) {
+    this.config = configService.get('TELEGRAM_TOKEN');
+  }
+
   @Get()
   getAll() {
-    return 'azure';
+    return 'azure:' + this.config;
   }
 
   @Get(':id')
