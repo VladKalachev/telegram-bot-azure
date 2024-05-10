@@ -20,6 +20,7 @@ export class AzureController {
   projectName: string;
   serverURL: string;
   orgName: string;
+  webApi: azdev.WebApi;
   workItemTracking: IWorkItemTrackingApi;
 
   constructor(
@@ -38,16 +39,17 @@ export class AzureController {
 
   async connection() {
     const authHandler = azdev.getPersonalAccessTokenHandler(this.azureToken);
-    const webApi = new azdev.WebApi(this.orgName, authHandler);
-    try {
-      this.workItemTracking = await webApi.getWorkItemTrackingApi();
-    } catch (error) {
-      console.error(error);
-    }
+    this.webApi = new azdev.WebApi(this.orgName, authHandler);
   }
 
   @Get('task/:id')
   async getTask(@Param('id') id: number) {
+    try {
+      this.workItemTracking = await this.webApi.getWorkItemTrackingApi();
+      await this.workItemTracking;
+    } catch (error) {
+      console.error(error);
+    }
     const workItem = await this.workItemTracking.getWorkItems([id]);
 
     return {
