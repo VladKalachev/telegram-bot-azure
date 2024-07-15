@@ -10,14 +10,12 @@ import {
 import { ConfigService } from '@nestjs/config';
 
 import { AzureService } from './azure.service';
-// import { TelegramService } from 'src/telegram/telegram.service';
 
 @Controller('azure')
 export class AzureController {
   constructor(
     private readonly configService: ConfigService,
     private readonly azureService: AzureService,
-    // private readonly telegramService: TelegramService,
   ) {}
 
   @Get('task/:id')
