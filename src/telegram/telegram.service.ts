@@ -54,7 +54,7 @@ export class TelegramService {
 
   async sendMessage(chatId: string, text: string) {
     try {
-      await this.bot.telegram.sendMessage(chatId, text);
+      await this.bot.telegram.sendMessage(chatId, JSON.stringify(text));
     } catch (error) {
       console.error('Error sending Telegram message', error);
     }
