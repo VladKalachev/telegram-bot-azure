@@ -3,7 +3,6 @@ import { TelegramService } from './telegram.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { getTelegramConfig } from 'src/configs/telegram.config';
-import { AzureModule } from 'src/azure/azure.module';
 
 @Module({
   imports: [
@@ -13,7 +12,6 @@ import { AzureModule } from 'src/azure/azure.module';
       useFactory: getTelegramConfig,
     }),
     ConfigModule,
-    AzureModule,
   ],
   providers: [TelegramService],
   exports: [TelegramService],

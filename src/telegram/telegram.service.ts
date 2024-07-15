@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Command, Ctx, InjectBot, Start, Update } from 'nestjs-telegraf';
-import { AzureService } from 'src/azure/azure.service';
 import { Context, Telegraf } from 'telegraf';
 
 @Injectable()
@@ -10,7 +9,6 @@ export class TelegramService {
   constructor(
     @InjectBot() private readonly bot: Telegraf<Context>,
     private readonly configService: ConfigService,
-    private readonly azureService: AzureService,
   ) {
     this.bot.telegram.setMyCommands([
       {
@@ -30,24 +28,35 @@ export class TelegramService {
 
   @Start()
   async startCommand(ctx: Context) {
+    // await ctx.reply(`Get chat id ${ctx.chat.id}`);
     await ctx.reply(`Привет, ${ctx.message.from.first_name}!`);
   }
 
-  @Command(['task'])
-  async getTaskCommand(ctx: Context) {
-    console.log(ctx);
+  @Command(['task', 'text'])
+  async getTaskCommand(@Ctx() ctx: Context) {
+    // console.log(ctx);
     await ctx.reply(`Вы хотите получить данные по задаче? Введи его id`);
-    const task = await this.azureService.getTask(1100);
-    await ctx.reply(`${JSON.stringify(task)}`);
+    const msg = ctx.message ?? ctx.editedMessage;
+    console.log(msg);
+    // const task = await this.azureService.getTask(1099);
+    // await ctx.reply(`${JSON.stringify(task)}`);
   }
 
   @Command(['st', 'update'])
-  async messageCommand(ctx: Context) {
+  async messageCommand(@Ctx() ctx: Context) {
     await ctx.reply(`Надо подумать`);
   }
 
   @Command('help')
   async helpCommand(@Ctx() ctx: Context) {
     await ctx.reply('Help command.');
+  }
+
+  async sendMessage(chatId: string, text: string) {
+    try {
+      await this.bot.telegram.sendMessage(chatId, text);
+    } catch (error) {
+      console.error('Error sending Telegram message', error);
+    }
   }
 }

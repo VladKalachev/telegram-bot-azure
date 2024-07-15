@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/axios';
 import {
   Body,
   Controller,
@@ -11,13 +10,14 @@ import {
 import { ConfigService } from '@nestjs/config';
 
 import { AzureService } from './azure.service';
+// import { TelegramService } from 'src/telegram/telegram.service';
 
 @Controller('azure')
 export class AzureController {
   constructor(
     private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
     private readonly azureService: AzureService,
+    // private readonly telegramService: TelegramService,
   ) {}
 
   @Get('task/:id')
@@ -48,5 +48,14 @@ export class AzureController {
   @Delete(':id')
   delete(@Param() id: string) {
     return `azure ${id}`;
+  }
+
+  @Post('webhook')
+  async webhook(@Body() dto: any) {
+    try {
+      await this.azureService.message(dto);
+    } catch (error) {
+      console.error('Error handler webhook', error);
+    }
   }
 }

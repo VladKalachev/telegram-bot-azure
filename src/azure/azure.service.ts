@@ -1,8 +1,8 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as azdev from 'azure-devops-node-api';
 import { IWorkItemTrackingApi } from 'azure-devops-node-api/WorkItemTrackingApi';
+import { TelegramService } from 'src/telegram/telegram.service';
 
 @Injectable()
 export class AzureService {
@@ -17,7 +17,7 @@ export class AzureService {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
+    private readonly telegramService: TelegramService,
   ) {
     this.config = this.configService.get('TELEGRAM_TOKEN');
     this.azureToken = this.configService.get('AZURE_ACCESS_TOKEN');
@@ -27,6 +27,11 @@ export class AzureService {
     this.azdev = azdev;
 
     this.connection();
+  }
+
+  async message(message: string) {
+    const chatId = this.configService.get('TELEGRAM_CHAT_ID');
+    await this.telegramService.sendMessage(chatId, message);
   }
 
   async connection() {
