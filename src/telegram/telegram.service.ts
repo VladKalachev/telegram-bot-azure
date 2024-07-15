@@ -54,8 +54,9 @@ export class TelegramService {
 
   async sendMessage(chatId: string, text: any) {
     const info = text.eventType;
+    const messageText = text.message.text;
     try {
-      await this.bot.telegram.sendMessage(chatId, info);
+      await this.bot.telegram.sendMessage(chatId, `${info} \n ${messageText}`);
     } catch (error) {
       console.error('Error sending Telegram message', error);
     }
