@@ -52,9 +52,10 @@ export class TelegramService {
     await ctx.reply('Help command.');
   }
 
-  async sendMessage(chatId: string, text: string) {
+  async sendMessage(chatId: string, text: any) {
+    const info = text.eventType;
     try {
-      await this.bot.telegram.sendMessage(chatId, JSON.stringify(text));
+      await this.bot.telegram.sendMessage(chatId, info);
     } catch (error) {
       console.error('Error sending Telegram message', error);
     }
