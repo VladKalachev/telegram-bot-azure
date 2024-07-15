@@ -16,10 +16,6 @@ export class TelegramService {
         description: 'Start Telegram',
       },
       {
-        command: 'chatId',
-        description: 'Получить chatId',
-      },
-      {
         command: 'update',
         description: 'Start Telegram',
       },
@@ -32,13 +28,11 @@ export class TelegramService {
 
   @Start()
   async startCommand(ctx: Context) {
-    // await ctx.reply(`Get chat id ${ctx.chat.id}`);
     await ctx.reply(`Привет, ${ctx.message.from.first_name}!`);
   }
 
   @Command(['task', 'text'])
   async getTaskCommand(@Ctx() ctx: Context) {
-    // console.log(ctx);
     await ctx.reply(`Вы хотите получить данные по задаче? Введи его id`);
     const msg = ctx.message ?? ctx.editedMessage;
     console.log(msg);
@@ -53,11 +47,6 @@ export class TelegramService {
 
   @Command('help')
   async helpCommand(@Ctx() ctx: Context) {
-    await ctx.reply('Help command.');
-  }
-
-  @Command('chatId')
-  async chatIdCommand(@Ctx() ctx: Context) {
     await ctx.reply(`Get chat id ${ctx.chat.id}`);
   }
 
