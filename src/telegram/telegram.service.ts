@@ -28,6 +28,8 @@ export class TelegramService {
 
   @Start()
   async startCommand(ctx: Context) {
+    // console.log(ctx.chat);
+    await ctx.reply(`Привет, ${JSON.stringify(ctx.message.from)}!`);
     await ctx.reply(`Привет, ${ctx.message.from.first_name}!`);
   }
 
