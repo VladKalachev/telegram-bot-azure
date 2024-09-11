@@ -31,7 +31,8 @@ export class AzureService {
 
   async message(message: string) {
     const chatId = this.configService.get('TELEGRAM_CHAT_ID');
-    await this.telegramService.sendMessage(chatId, message);
+    const messageThreadId = this.configService.get('TELEGRAM_THREAD_CHAT_ID');
+    await this.telegramService.sendMessage(chatId, message, messageThreadId);
   }
 
   async connection() {

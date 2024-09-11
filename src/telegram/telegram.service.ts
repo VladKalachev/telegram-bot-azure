@@ -50,13 +50,25 @@ export class TelegramService {
   @Command('help')
   async helpCommand(@Ctx() ctx: Context) {
     await ctx.reply(`Get chat id ${ctx.chat.id}`);
+    await ctx.reply(`Get chat id ${ctx.message.message_thread_id}`);
   }
 
-  async sendMessage(chatId: string, text: any) {
+  async sendMessage(chatId: string, text: any, messageThreadId: number) {
     const info = text.eventType;
     const messageText = text.message.text;
     try {
-      await this.bot.telegram.sendMessage(chatId, `${info} \n ${messageText}`);
+      if (messageThreadId) {
+        await this.bot.telegram.sendMessage(
+          chatId,
+          `${info} \n ${messageText}`,
+          { message_thread_id: messageThreadId },
+        );
+      } else {
+        await this.bot.telegram.sendMessage(
+          chatId,
+          `${info} \n ${messageText}`,
+        );
+      }
     } catch (error) {
       console.error('Error sending Telegram message', error);
     }
